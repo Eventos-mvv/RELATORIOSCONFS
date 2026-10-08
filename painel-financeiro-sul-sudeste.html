@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Painel Financeiro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--vinho:#e8401c;--vinho-2:#c42f10;--vinho-3:#111;--lima:#e6f200;--tinta:#111;--suave:rgba(17,17,17,.6);--linha:rgba(17,17,17,.14);--neg:#e8401c;--ok:#111;--fundo:#e6f200;--titulo-cor:#111;--txt:#111;--btn-bg:#111;--btn-fg:#e6f200;--btn-hover:#e8401c;--th-bg:#111;--th-fg:#e6f200;--marca:#e6f200;--tot:#f3fb8a;--hov:#fafde0;--titulo:"Bebas Neue",Impact,sans-serif}
+body[data-tema="sul"]{--vinho:#ff3b0a;--vinho-2:#d92f05;--neg:#ff3b0a;--fundo:#4b3866;--titulo-cor:#fff;--tinta:#2b1f3d;--txt:#3a2a52;--suave:rgba(43,31,61,.6);--linha:rgba(75,56,102,.2);--btn-bg:#ff3b0a;--btn-fg:#fff;--btn-hover:#d92f05;--th-bg:#4b3866;--th-fg:#fff;--marca:#d9cdea;--tot:#ece6f4;--hov:#f6f3fa}
+body[data-tema="sudeste"]{--vinho:#ff3b0a;--vinho-2:#d92f05;--neg:#ff3b0a;--fundo:#67372a;--titulo-cor:#fff;--tinta:#2f1710;--txt:#5a2d21;--suave:rgba(47,23,16,.6);--linha:rgba(103,55,42,.2);--btn-bg:#ff3b0a;--btn-fg:#fff;--btn-hover:#d92f05;--th-bg:#67372a;--th-fg:#fff;--marca:#e8cfc5;--tot:#f4e8e3;--hov:#faf4f1}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:Poppins,system-ui,sans-serif;font-size:15px;line-height:1.5;color:var(--tinta);background:var(--fundo) fixed}
+h1{margin:0;font-family:var(--titulo);font-weight:400;font-size:clamp(40px,8vw,60px);line-height:1;color:var(--titulo-cor);letter-spacing:.01em}
+.wrap{max-width:1200px;margin:0 auto;padding:28px 18px 60px}
+button{font:inherit;cursor:pointer}
+.btn{border:0;border-radius:6px;padding:11px 18px;background:var(--btn-bg);color:var(--btn-fg);font-weight:600;font-size:14px;letter-spacing:.04em}
+.btn:hover{background:var(--btn-hover)}
+input[type=search]{padding:11px 14px;border:2px solid var(--tinta);border-radius:8px;background:#fff;color:var(--tinta);font:inherit;min-width:200px}
+input:focus{outline:0;border-color:var(--vinho);box-shadow:0 0 0 2px var(--vinho)}
+.top{display:flex;flex-wrap:wrap;gap:12px 18px;align-items:flex-end;justify-content:space-between;margin-bottom:22px}
+.sub{margin:6px 0 0;display:inline-block;background:var(--vinho);color:#fff;padding:2px 12px;border-radius:4px;font-family:var(--titulo);font-size:20px;letter-spacing:.12em}
+.sel{margin-top:8px;max-width:100%;padding:6px 14px;border:0;border-radius:6px;background:var(--btn-bg);color:var(--btn-fg);font-family:var(--titulo);font-size:22px;letter-spacing:.1em;cursor:pointer}
+.sel:focus{outline:0;box-shadow:0 0 0 3px var(--vinho)}
+.tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-bottom:22px}
+.card{background:#fff;border:1px solid var(--linha);border-radius:10px;padding:14px 16px;box-shadow:0 1px 6px rgba(0,0,0,.12)}
+.card h3{margin:0 0 8px;font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--txt)}
+.big{font-family:var(--titulo);font-size:40px;line-height:1;color:var(--txt)}
+.big.neg{color:var(--neg)}
+.big.pos{color:var(--txt);background:linear-gradient(transparent 60%,var(--marca) 60%);display:inline-block}
+.hint{margin-top:6px;font-size:13px;color:var(--suave)}
+
+.charts{display:grid;grid-template-columns:1fr 2fr;gap:12px;margin-bottom:22px}
+.cv{position:relative;height:280px}
+.cv.tall{height:430px}
+.charts.sem-setores{grid-template-columns:1fr 1fr}
+.charts.sem-setores .c-origem{grid-column:1/-1}
+@media(max-width:760px){.charts,.charts.sem-setores{grid-template-columns:1fr}}
+
+.box{background:#fff;border:1px solid var(--linha);border-radius:10px;overflow:auto;box-shadow:0 1px 6px rgba(0,0,0,.12);margin-bottom:22px}
+.box h2{margin:0;padding:14px 16px 4px;font-family:var(--titulo);font-weight:400;font-size:28px;color:var(--txt)}
+table{border-collapse:collapse;width:100%;min-width:560px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--linha);font-size:14px}
+th{background:var(--th-bg);color:var(--th-fg);font-weight:500;font-size:12px;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+td.n,th.n{text-align:right;white-space:nowrap}
+tr.tot td{font-weight:600;background:var(--tot)}
+tr:hover td{background:var(--hov)}
+.pill{display:inline-block;padding:2px 10px;border-radius:99px;font-size:12.5px;font-weight:500;background:var(--vinho);color:#fff;white-space:nowrap}
+.vazio{padding:30px 16px;text-align:center;color:var(--suave)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div>
+      <h1>Painel financeiro</h1>
+      <select class="sel" id="selEvento" aria-label="Escolher evento"></select>
+    </div>
+    <div class="tools">
+      <input type="search" id="busca" placeholder="Buscar despesa…" aria-label="Buscar despesa">
+      <button class="btn" id="bExcel" type="button">Baixar Excel</button>
+    </div>
+  </div>
+
+  <section class="cards" id="cards"></section>
+
+  <section class="charts">
+    <div class="card c-origem"><h3>Origem das entradas</h3><div class="cv"><canvas id="gOrigem"></canvas></div></div>
+    <div class="card" id="cSetores"><h3>Inscrições por setor e lote</h3><div class="cv"><canvas id="gSetores"></canvas></div></div>
+    <div class="card"><h3>Entradas × saídas</h3><div class="cv tall"><canvas id="gFluxo"></canvas></div></div>
+    <div class="card"><h3>Despesas por item</h3><div class="cv tall"><canvas id="gDesp"></canvas></div></div>
+  </section>
+
+  <div class="box" id="boxSetores">
+    <h2>Setores por lote</h2>
+    <table><thead><tr><th>Setor</th><th class="n">1º lote</th><th class="n">2º lote</th><th class="n">3º lote</th><th class="n">Total</th></tr></thead><tbody id="tSetores"></tbody></table>
+  </div>
+
+  <div class="box">
+    <h2>Despesas</h2>
+    <table><thead><tr><th>Nº</th><th>Despesa</th><th class="n">Valor</th><th class="n">% das saídas</th><th>Situação</th></tr></thead><tbody id="tDesp"></tbody></table>
+    <div class="vazio" id="vazio" hidden>Nenhuma despesa encontrada.</div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+/* ===== DADOS (adicione um bloco por evento) ===== */
+const EVENTOS = [
+  {
+    nome: 'Conferência de Ministros Sul 2026',
+    tema: 'sul',
+    adultos: 380, criancas: 41,           // equipe: 31 (não entra na contagem)
+    entradas: [['Inscrições adultos', 134800], ['Inscrições crianças', 6150], ['Ofertas', 15048.92],
+      ['Entrada Editora', 3815.18], ['Entrada Alumni', 2616.25], ['Filhos da diretoria', 1317.70], ['Entrada Feminina', 5441.08]],
+    setores: [
+      ['Setor A', 9706.55, 11351.75, 18195.66],
+      ['Setor B', 9151.89, 10703.09, 23023.08],
+      ['Setor C', 9429.22, 11027.48, 23949.08],
+      ['Setor D', 0, 0, 0]
+    ],
+    infantil: 5781.67,
+    despesas: [
+      ['Alimentação equipe', 56101.49], ['Departamento infantil', 2288], ['Passagens aéreas', 89289.58],
+      ['Aluguel de carro', 2194.95], ['Hotel diretoria e equipe', 59479.86], ['Decoração', 7813.44],
+      ['Oferta igreja', 13231.94], ['Tiketo', 8630.53], ['Combustível', 1182.28], ['Extras', 17213.64]
+    ]
+  },
+  {
+    nome: 'Conferência de Ministros Sudeste 2026',
+    tema: 'sudeste',
+    adultos: 526, criancas: 68,           // equipe: 126 + 17 crianças da equipe (não entram na contagem)
+    entradas: [['Inscrições adultos', 315600], ['Inscrições crianças', 20400], ['Entrada Alumni', 9050.51],
+      ['Entrada Editora', 41310], ['Entrada Agência de Missões', 6885.40], ['Entrada Centro de Cura', 3296.27],
+      ['Entrada Filhos da diretoria', 12472], ['Entrada IEVV Sede', 9344.34], ['Entrada Feminina', 16560.18], ['Ofertas', 28328.06]],
+    setores: [],                          // planilha sem divisão por setor/lote
+    infantil: 0,
+    despesas: [
+      ['Alimentação equipe', 12449.70], ['Pulseiras', 563], ['Departamento infantil', 2467.42],
+      ['Passagens aéreas', 109205.14], ['Aluguel de carro', 5772.85], ['Hotel diretoria e equipe', 278294],
+      ['Iluminação', 4000], ['Sala VIP', 646.60], ['Traslados', 23247.18], ['LED', 85000],
+      ['Som', 62000], ['Combustível', 333.86], ['Extras', 13289.21]
+    ]
+  }
+  /* , { nome: 'Outro evento', adultos: 0, criancas: 0, entradas: [...], setores: [...], infantil: 0, despesas: [...] } */
+];
+
+/* ===== AUXILIARES ===== */
+const $ = id => document.getElementById(id);
+const R = v => v.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
+const soma = a => Math.round(a.reduce((s, v) => s + v, 0) * 100) / 100;
+const TEMAS = {
+  centro: {cores: ['#e8401c', '#111111', '#c9d400', '#9a9a9a', '#5a5a5a'], fluxo: ['#111111', '#e8401c', '#c9d400'], desp: '#e8401c', neg: '#e8401c'},
+  sudeste: {cores: ['#67372a', '#ff3b0a', '#d9a89a', '#9a9a9a', '#2f1710'], fluxo: ['#67372a', '#ff3b0a', '#d9a89a'], desp: '#ff3b0a', neg: '#ff3b0a'},
+  sul:    {cores: ['#4b3866', '#ff3b0a', '#b8a5d6', '#9a9a9a', '#2b1f3d'], fluxo: ['#4b3866', '#ff3b0a', '#b8a5d6'], desp: '#ff3b0a', neg: '#ff3b0a'}
+};
+let CORES, T;
+const mil = v => 'R$ ' + (v / 1000).toLocaleString('pt-BR') + ' mil';
+Chart.defaults.font.family = 'Poppins, system-ui, sans-serif';
+const tip = {callbacks: {label: c => ' ' + (c.dataset.label ? c.dataset.label + ': ' : c.label + ': ') + R(c.chart.options.indexAxis === 'y' ? c.parsed.x : (c.parsed.y ?? c.parsed))}};
+const base = {maintainAspectRatio: false, plugins: {tooltip: tip}};
+
+let ev, totEnt, totSai, saldo, lotes, totInscricoes, graficos = [];
+
+function card(t, v, hint, cls){
+  const c = document.createElement('div'); c.className = 'card';
+  const h = document.createElement('h3'); h.textContent = t;
+  const b = document.createElement('div'); b.className = 'big ' + (cls || ''); b.textContent = v;
+  c.append(h, b);
+  if(hint){ const p = document.createElement('div'); p.className = 'hint'; p.textContent = hint; c.appendChild(p); }
+  $('cards').appendChild(c);
+}
+
+function linha(tb, cels, cls){
+  const tr = document.createElement('tr'); if(cls) tr.className = cls;
+  cels.forEach(c => {
+    const td = document.createElement('td');
+    if(c instanceof Node) td.appendChild(c); else td.textContent = c;
+    if(typeof c === 'string' && c.startsWith('R$') || c === '—') td.className = 'n';
+    tr.appendChild(td);
+  });
+  tb.appendChild(tr);
+}
+
+/* ===== RENDER DE UM EVENTO ===== */
+function mostrar(idx){
+  ev = EVENTOS[idx];
+  document.body.dataset.tema = ev.tema || 'centro';
+  T = TEMAS[ev.tema || 'centro']; CORES = T.cores;
+  document.title = 'Painel Financeiro – ' + ev.nome;
+  totEnt = soma(ev.entradas.map(e => e[1]));
+  totSai = soma(ev.despesas.map(d => d[1]));
+  saldo = soma([totEnt, -totSai]);
+  const temSet = ev.setores.length > 0;
+  $('cSetores').style.display = $('boxSetores').style.display = temSet ? '' : 'none';
+  document.querySelector('.charts').classList.toggle('sem-setores', !temSet);
+  lotes = [1, 2, 3].map(i => soma(ev.setores.map(s => s[i])));
+  totInscricoes = soma([soma(ev.setores.map(s => soma(s.slice(1)))), ev.infantil]);
+
+  /* cartões */
+  $('cards').innerHTML = '';
+  card('Total de entradas', R(totEnt));
+  card('Total de saídas', R(totSai));
+  card('Saldo final', R(saldo), 'As entradas cobrem ' + (totSai ? Math.round(totEnt / totSai * 100) : 0) + '% das saídas', saldo < 0 ? 'neg' : 'pos');
+  card('Inscrições', String(ev.adultos + ev.criancas), ev.adultos + ' adultos, ' + ev.criancas + ' crianças');
+  card('Ticket médio adulto', R(ev.adultos ? ev.entradas[0][1] / ev.adultos : 0), 'Criança: ' + R(ev.criancas ? ev.entradas[1][1] / ev.criancas : 0));
+
+  /* gráficos */
+  graficos.forEach(g => g.destroy()); graficos = [];
+  graficos.push(new Chart($('gOrigem'), {type: 'doughnut',
+    data: {labels: ev.entradas.map(e => e[0]), datasets: [{data: ev.entradas.map(e => e[1]), backgroundColor: CORES, borderWidth: 2}]},
+    options: {...base, plugins: {tooltip: tip, legend: {position: 'bottom'}}}}));
+  if(temSet) graficos.push(new Chart($('gSetores'), {type: 'bar',
+    data: {labels: ev.setores.map(s => s[0]), datasets: ['1º lote', '2º lote', '3º lote'].map((l, i) => ({label: l, data: ev.setores.map(s => s[i + 1]), backgroundColor: CORES[i]}))},
+    options: {...base, plugins: {tooltip: tip, legend: {position: 'bottom'}},
+      scales: {x: {stacked: true}, y: {stacked: true, beginAtZero: true, ticks: {callback: mil}}}}}));
+  graficos.push(new Chart($('gFluxo'), {type: 'bar',
+    data: {labels: ['Entradas', 'Saídas', 'Saldo'], datasets: [{data: [totEnt, totSai, saldo], backgroundColor: [T.fluxo[0], T.fluxo[1], saldo < 0 ? T.neg : T.fluxo[2]]}]},
+    options: {...base, plugins: {tooltip: tip, legend: {display: false}}, scales: {y: {ticks: {callback: mil}}}}}));
+  const ord = [...ev.despesas].sort((a, b) => b[1] - a[1]);
+  graficos.push(new Chart($('gDesp'), {type: 'bar',
+    data: {labels: ord.map(d => d[0]), datasets: [{data: ord.map(d => d[1]), backgroundColor: T.desp}]},
+    options: {...base, indexAxis: 'y', plugins: {tooltip: tip, legend: {display: false}}, scales: {x: {beginAtZero: true, ticks: {callback: mil}}}}}));
+
+  /* tabela de setores */
+  const tb = $('tSetores'); tb.innerHTML = '';
+  ev.setores.forEach(s => linha(tb, [s[0], ...s.slice(1).map(v => v ? R(v) : '—'), R(soma(s.slice(1)))]));
+  linha(tb, ['D. Infantil', '—', '—', '—', R(ev.infantil)]);
+  linha(tb, ['Total', ...lotes.map(R), R(totInscricoes)], 'tot');
+
+  $('busca').value = '';
+  renderDesp();
+}
+
+function renderDesp(){
+  const q = $('busca').value.trim().toLowerCase();
+  const lista = ev.despesas.map((d, i) => ({n: i + 1, nome: d[0], v: d[1], sit: d[2] || ''}))
+    .filter(d => !q || (d.nome + ' ' + d.sit).toLowerCase().includes(q));
+  const tb = $('tDesp'); tb.innerHTML = '';
+  lista.forEach(d => {
+    let sit = '';
+    if(d.sit){ sit = document.createElement('span'); sit.className = 'pill'; sit.textContent = d.sit; }
+    linha(tb, [String(d.n), d.nome, R(d.v), (totSai ? d.v / totSai * 100 : 0).toLocaleString('pt-BR', {maximumFractionDigits: 1}) + '%', sit]);
+  });
+  if(lista.length) linha(tb, ['', 'Total' + (q ? ' (filtrado)' : ''), R(soma(lista.map(d => d.v))), '', ''], 'tot');
+  $('vazio').hidden = !!lista.length;
+  tb.querySelectorAll('tr').forEach(tr => { const c = tr.children; c[3].style.textAlign = 'right'; c[2].className = 'n'; });
+}
+$('busca').addEventListener('input', renderDesp);
+
+/* ===== SELETOR ===== */
+const sel = $('selEvento');
+EVENTOS.forEach((e, i) => { const o = document.createElement('option'); o.value = i; o.textContent = e.nome; sel.appendChild(o); });
+let ini = 0;
+try { const salvo = +localStorage.getItem('painelEventoSulSudeste'); if(salvo >= 0 && salvo < EVENTOS.length) ini = salvo; } catch(e){}
+sel.value = ini;
+sel.addEventListener('change', () => { try { localStorage.setItem('painelEventoSulSudeste', sel.value); } catch(e){} mostrar(+sel.value); });
+mostrar(ini);
+
+/* ===== EXCEL ===== */
+$('bExcel').onclick = () => {
+  const resumo = [['Item', 'Valor'], ...ev.entradas, ['Total de entradas', totEnt], ['Total de saídas', totSai], ['Saldo final', saldo],
+    [], ['Inscrições adultos', ev.adultos], ['Inscrições crianças', ev.criancas]];
+  const setores = [['Setor', '1º lote', '2º lote', '3º lote', 'Total'],
+    ...ev.setores.map(s => [...s, soma(s.slice(1))]), ['D. Infantil', '', '', '', ev.infantil], ['Total', ...lotes, totInscricoes]];
+  const desp = [['Nº', 'Despesa', 'Valor', 'Situação'], ...ev.despesas.map((d, i) => [i + 1, d[0], d[1], d[2] || '']), ['', 'Total', totSai, '']];
+  const wb = XLSX.utils.book_new();
+  [['Resumo', resumo, [26, 16]], ['Setores', setores, [16, 14, 14, 14, 14]], ['Despesas', desp, [6, 30, 16, 14]]].filter(x => x[0] !== 'Setores' || ev.setores.length).forEach(([nome, dados, w]) => {
+    const ws = XLSX.utils.aoa_to_sheet(dados); ws['!cols'] = w.map(x => ({wch: x}));
+    XLSX.utils.book_append_sheet(wb, ws, nome);
+  });
+  XLSX.writeFile(wb, 'financeiro-' + ev.nome.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-') + '-' + new Date().toISOString().slice(0, 10) + '.xlsx');
+};
+</script>
+</body>
+</html>
